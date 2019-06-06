@@ -2,7 +2,7 @@ import BusPrediction from '../../DTO/BusPrediction';
 
 export default class HandleBusPredictions {
 	async fetchBusPredictions() {
-		return await fetch('https://countdown.api.tfl.gov.uk/interfaces/ura/instant_V1?StopCode1=74804&DirectionID=1&VisitNumber=1&ReturnList=StopCode1,StopPointName,LineName,DestinationText,EstimatedTime,MessageUUID,MessageText,MessagePriority,MessageType,ExpireTime')
+		return await fetch('//countdown.api.tfl.gov.uk/interfaces/ura/instant_V1?StopCode1=74804&DirectionID=1&VisitNumber=1&ReturnList=StopCode1,StopPointName,LineName,DestinationText,EstimatedTime,MessageUUID,MessageText,MessagePriority,MessageType,ExpireTime')
 			.then((value) => value.body.getReader().read()).then(({ value }) => {
 				let string = new TextDecoder('utf-8').decode(value);
 				let split = string.split(']');
