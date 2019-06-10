@@ -12,16 +12,33 @@ export default class HandleBusPredictions {
 				split.splice(0, 1);
 				let buses = [];
 				for (let i = 0; i < split.length; i++) {
-					let inS = split[i].split('[');
-					split[i] = '[' + inS[1];
 					split[i] = split[i] + ']';
 					let splitJson = JSON.parse(split[i]);
 					const expectedArrival = new Date(splitJson[5]);
-					let bus = new BusPrediction(splitJson[3], splitJson[4], expectedArrival);
+					const timeDiff = this.timeDiff(expectedArrival);
+					let bus = new BusPrediction(splitJson[3], splitJson[4], expectedArrival, timeDiff);
 					buses.push(bus);
 				}
 				return this.sortNextBuses(buses);
 			});
+	}
+
+	prepareMinutes(minutes) {
+		switch (minutes) {
+			case 0:
+				return 'Due';
+			case 1:
+				return minutes + ' Min';
+			default:
+				return minutes + ' Mins';
+		}
+	}
+
+	timeDiff(dateExpected) {
+		const dateNow = new Date();
+		let diff = ((dateExpected.getTime() - dateNow.getTime()) / 1000) / 60;
+		const minutes = Math.abs(Math.round(diff));
+		return this.prepareMinutes(minutes);
 	}
 
 	sortNextBuses(array) {

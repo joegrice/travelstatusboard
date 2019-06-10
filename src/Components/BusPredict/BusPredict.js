@@ -5,20 +5,9 @@ export default class BusPredictor extends Component {
 
 	fetchBusPredictions() {
 		let handler = new HandleBusPredictions();
-		handler.fetchBusPredictions().then((then) => {
-			for (let a of then) {
-				const dateNow = new Date();
-				let diff = ((a.expectedArrival.getTime() - dateNow.getTime()) / 1000) / 60;
-				let diffRound =  Math.abs(Math.round(diff));
-				console.log(a.lineName + ' ' + a.destinationName + ' ' + diffRound + ' Min(s)');
-			}
+		handler.fetchBusPredictions().then((value) => {
+			this.setState({ buses: value });
 		});
-	}
-
-	dateDiff(dateExpected) {
-		const dateNow = new Date();
-		let diff = ((dateExpected.getTime() - dateNow.getTime()) / 1000) / 60;
-		return Math.abs(Math.round(diff));
 	}
 
 	constructor() {
@@ -26,6 +15,9 @@ export default class BusPredictor extends Component {
 		// set initial time:
 		this.state.time = Date.now();
 		this.state.buses = [];
+
+		// This syntax ensures `this` is bound within functions
+		this.fetchBusPredictions = this.fetchBusPredictions.bind(this);
 	}
 
 	componentDidMount() {
@@ -42,12 +34,11 @@ export default class BusPredictor extends Component {
 
 	render(props, state) {
 		let time = new Date(state.time).toLocaleTimeString();
-		let buses = state.buses;
 		return (
 			<div>
 				<span>{time}</span>
 				<button onClick={this.fetchBusPredictions}>Component 1</button>
-				<div> {buses.map(item =>  <div> {item.lineName} {item.destinationName} {item.dateDiffStr} </div>) } </div>
+				<div> {this.state.buses.map(item => <div> {item.lineName} {item.destinationName} {item.timeDiff} </div>)} </div>
 			</div>
 		);
 	}
