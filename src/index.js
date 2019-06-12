@@ -7,7 +7,7 @@ export default class App extends Component {
 		return (
 			<div>
 				<h1>Travel Status Board</h1>
-				<BusPredict />
+				<div><BusPredict /></div>
 			</div>
 		);
 	}

@@ -1,12 +1,15 @@
 import { Component } from 'preact';
 import HandleBusPredictions from './HandleBusPredictions';
+import PredictionView from './PredictionView';
 
 export default class BusPredictor extends Component {
 
 	fetchBusPredictions() {
 		let handler = new HandleBusPredictions();
 		handler.fetchBusPredictions().then((value) => {
-			this.setState({ buses: value });
+			this.setState({
+				buses: [this.state.buses, <PredictionView buses={value} />]
+			});
 		});
 	}
 
@@ -38,7 +41,7 @@ export default class BusPredictor extends Component {
 			<div>
 				<span>{time}</span>
 				<button onClick={this.fetchBusPredictions}>Component 1</button>
-				<div> {this.state.buses.map(item => <div> {item.lineName} {item.destinationName} {item.timeDiff} </div>)} </div>
+				{state.buses}
 			</div>
 		);
 	}
